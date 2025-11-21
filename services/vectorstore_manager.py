@@ -97,10 +97,10 @@ class VectorStoreManager:
         print(f"\n Creating retriever (k={k})")
 
         retriever = vectorstore.as_retriever(
-            search_type="similarity",  # Options: "similarity", "mmr"
+            search_type="similarity",
             search_kwargs={
-                "k": k,
-                "fetch_k": k * 2  # Fetch more candidates for MMR
+                "k": k
+                # Remove "fetch_k": k * 2 - not supported by ChromaDB
             }
         )
 

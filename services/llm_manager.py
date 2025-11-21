@@ -22,16 +22,8 @@ class LLMManager:
     ):
         """
         Step 8: Initialize the LLM - Set up the language model
-
-        Args:
-            model_id: HuggingFace model identifier
-            max_new_tokens: Maximum tokens to generate
-            temperature: Sampling temperature (0.0 = deterministic, 1.0 = creative)
-
-        Returns:
-            HuggingFacePipeline instance
         """
-        print(f"\n Initializing LLM: {model_id}")
+        print(f"\n🤖 Initializing LLM: {model_id}")
         print(f"   Device: {Config.DEVICE}")
 
         # Load tokenizer
@@ -48,21 +40,23 @@ class LLMManager:
             low_cpu_mem_usage=True
         )
 
-        print(f" Model loaded on {Config.DEVICE}")
+        print(f"✅ Model loaded on {Config.DEVICE}")
 
-        # Create pipeline
+        # Create pipeline with better stopping criteria
         pipe = pipeline(
             "text-generation",
             model=model,
             tokenizer=tokenizer,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=Config.TOP_P,
+            max_new_tokens=100,  # Reduced for concise answers
+            temperature=0.1,  # Lower temperature for more focused answers
+            top_p=0.9,
             do_sample=True,
-            repetition_penalty=Config.REPETITION_PENALTY
+            repetition_penalty=1.2,  # Increased to avoid repetition
+            pad_token_id=tokenizer.eos_token_id,
+            eos_token_id=tokenizer.eos_token_id,
         )
 
         hf_llm = HuggingFacePipeline(pipeline=pipe)
 
-        print(f" LLM pipeline ready!")
+        print(f"✅ LLM pipeline ready!")
         return hf_llm

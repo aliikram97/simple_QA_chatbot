@@ -9,11 +9,11 @@ class Config:
     EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
     # Text splitting parameters
-    CHUNK_SIZE = 1000
-    CHUNK_OVERLAP = 200
+    CHUNK_SIZE = 500
+    CHUNK_OVERLAP = 100
 
     # Retrieval parameters
-    RETRIEVAL_K = 3  # Number of documents to retrieve
+    RETRIEVAL_K = 5  # Number of documents to retrieve
 
     # LLM parameters
     MAX_NEW_TOKENS = 512

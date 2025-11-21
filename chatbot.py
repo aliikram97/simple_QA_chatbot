@@ -102,6 +102,7 @@ class QABotInterface:
             # Get answer from QA chain
             result = self.qa_chain({"query": question})
             answer = result['result']
+            answer = QAChainBuilder.post_process_answer(question, answer)
 
             # Format source documents
             sources = self._format_sources(result.get('source_documents', []))
