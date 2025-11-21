@@ -10,6 +10,7 @@ from services.llm_manager import LLMManager
 from services.embedding_manager import EmbeddingManager
 from services.vectorstore_manager import VectorStoreManager
 from services.chain_builder import QAChainBuilder
+from config import Config
 
 # Suppress warnings
 import warnings
