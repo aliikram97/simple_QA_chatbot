@@ -5,7 +5,7 @@ class Config:
     """Step 2: Configuration - Centralized configuration management"""
 
     # Model configurations
-    LLM_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+    LLM_MODEL_ID = "microsoft/Phi-3.5-mini-instruct"
     EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
     # Text splitting parameters
@@ -17,7 +17,7 @@ class Config:
 
     # LLM parameters
     MAX_NEW_TOKENS = 512
-    TEMPERATURE = 0.3
+    TEMPERATURE = 0.0
     TOP_P = 0.9
     REPETITION_PENALTY = 1.1
 
