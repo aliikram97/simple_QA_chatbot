@@ -5,7 +5,8 @@ class Config:
     """Step 2: Configuration - Centralized configuration management"""
 
     # Model configurations
-    LLM_MODEL_ID = "microsoft/Phi-3.5-mini-instruct"
+    # LLM_MODEL_ID = "microsoft/Phi-3.5-mini-instruct"
+    LLM_MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
     EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
     # Text splitting parameters
