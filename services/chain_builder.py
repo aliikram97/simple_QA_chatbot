@@ -1,6 +1,7 @@
 import re
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.prompts import ChatPromptTemplate
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -10,16 +11,17 @@ class QAChainBuilder:
     """Builds and manages QA chains"""
 
     @staticmethod
-    def create_prompt_template() -> PromptTemplate:
+    def create_prompt_template() -> ChatPromptTemplate:
         """
         Step 10: Prompt Engineering - Improved prompt with strict instructions
+        Updated to use ChatPromptTemplate for LangChain 0.3.x
         """
         template = """You are a helpful assistant analyzing a document. Use ONLY the information provided in the context below to answer the question. If the answer cannot be found in the context, say "I cannot answer this based on the provided document."
 
 Context:
 {context}
 
-Question: {question}
+Question: {input}
 
 Instructions:
 - Answer based ONLY on the context above
@@ -29,44 +31,39 @@ Instructions:
 
 Answer:"""
 
-        return PromptTemplate(
-            template=template,
-            input_variables=["context", "question"]
-        )
+        return ChatPromptTemplate.from_template(template)
 
     @staticmethod
     def create_qa_chain(retriever, llm, return_source_documents: bool = True):
         """
         Step 9: Create the QA Chain - Connect retriever and LLM
+        Updated to use LCEL (LangChain Expression Language) pattern
 
-        Chain types:
-        - stuff: Put all docs into context (simple, works for small docs)
-        - map_reduce: Summarize each doc, then combine
-        - refine: Iteratively refine answer with each doc
-        - map_rerank: Score each doc's answer, return best
+        This uses the new create_retrieval_chain pattern which is the modern
+        approach in LangChain 0.3.x, replacing the deprecated RetrievalQA.
 
         Args:
             retriever: Document retriever
             llm: Language model
-            return_source_documents: Whether to return source documents
+            return_source_documents: Whether to return source documents (always True in new pattern)
 
         Returns:
-            RetrievalQA chain
+            Retrieval chain using LCEL
         """
         print(f"\n✓ Creating QA chain...")
-        print(f"  Chain type: stuff")
+        print(f"  Chain type: LCEL with stuff documents")
         print(f"  Return sources: {return_source_documents}")
 
+        # Get the prompt template
         prompt = QAChainBuilder.create_prompt_template()
 
-        qa_chain = RetrievalQA.from_chain_type(
-            llm=llm,
-            chain_type="stuff",  # Simplest approach
-            retriever=retriever,
-            return_source_documents=return_source_documents,
-            chain_type_kwargs={"prompt": prompt},
-            verbose=False
-        )
+        # Create the document processing chain
+        # This handles formatting documents with the prompt
+        document_chain = create_stuff_documents_chain(llm, prompt)
+
+        # Create the full retrieval chain
+        # This combines retriever + document processing
+        qa_chain = create_retrieval_chain(retriever, document_chain)
 
         print(f"✓ QA chain created successfully")
         return qa_chain

@@ -90,14 +90,23 @@ class QueryThread(QThread):
         try:
             print(f"\n🔍 Processing question: {self.question}")
 
-            result = self.qa_chain({"query": self.question})
-            answer = result['result']
+            # Updated for LangChain 0.3.x LCEL pattern
+            # Changed from: qa_chain({"query": question})
+            # Changed to: qa_chain.invoke({"input": question})
+            result = self.qa_chain.invoke({"input": self.question})
+
+            # Updated key access for new LCEL return format
+            # Changed from: result['result']
+            # Changed to: result['answer']
+            answer = result['answer']
             print(f'the raw answer is given as {answer}')
             answer = QAChainBuilder.post_process_answer(self.question, answer)
             print(f'the processed answer is {answer}')
 
-            # Format sources
-            sources = self._format_sources(result.get('source_documents', []))
+            # Updated for new LCEL return format
+            # Changed from: result.get('source_documents', [])
+            # Changed to: result.get('context', [])
+            sources = self._format_sources(result.get('context', []))
 
             self.finished.emit(answer, sources)
 
@@ -737,6 +746,7 @@ def main():
     print("PDF QA BOT - PYQT6 DESKTOP EDITION")
     print("=" * 80)
     print("\nEnhanced desktop application with multiple retrieval strategies")
+    print("Updated for LangChain 0.3.x with LCEL pattern")
     print("=" * 80 + "\n")
 
     app = QApplication(sys.argv)
@@ -753,4 +763,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

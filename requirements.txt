@@ -1,11 +1,55 @@
-gradio==4.44.0
-langchain==0.3.0
-langchain-community==0.3.0
-langchain-huggingface==0.1.0
-langchain-core==0.3.0
+# ===============================================================================
+# WORKING REQUIREMENTS FOR PYTHON 3.10
+# Resolves tokenizers version conflict - TESTED AND WORKING
+# ===============================================================================
+
+# Core LangChain packages
+langchain==0.3.13
+langchain-community==0.3.13
+langchain-core==0.3.28
+langchain-huggingface==0.1.2
+langchain-text-splitters==0.3.4
+
+# Vector Store - Using older version compatible with tokenizers 0.19.x
 chromadb==0.4.24
-pypdf==4.3.1
-pydantic==2.9.1
-transformers==4.44.0
-accelerate==0.33.0
-sentence-transformers==3.0.1
+
+# PDF Processing
+pypdf==5.1.0
+
+# Data Validation - pydantic-core auto-installed
+pydantic==2.10.3
+
+# HuggingFace & ML - CRITICAL: These versions work together
+# transformers 4.44.2 requires tokenizers>=0.19,<0.20
+# chromadb 0.4.24 requires tokenizers>=0.13.2
+# tokenizers 0.19.1 satisfies BOTH requirements
+transformers==4.44.2
+tokenizers==0.19.1
+accelerate==1.2.1
+sentence-transformers==3.3.1
+huggingface-hub==0.27.0
+
+# UI Framework (PyQt6 for desktop GUI)
+PyQt6==6.8.0
+PyQt6-Qt6==6.8.1
+PyQt6-sip==13.9.0
+
+# Additional utilities
+numpy==1.26.4
+regex==2024.11.6
+tqdm==4.67.1
+requests==2.32.3
+urllib3==2.2.3
+certifi==2024.12.14
+
+# Performance optimizations
+safetensors==0.4.5
+psutil==6.1.1
+
+# BM25 for hybrid retrieval (required by vectorstore_manager.py)
+rank-bm25==0.2.2
+
+# File handling
+filelock==3.16.1
+fsspec==2024.10.0
+packaging==24.2
